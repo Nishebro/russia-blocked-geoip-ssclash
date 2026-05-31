@@ -21,7 +21,7 @@
       "action": "add",
       "args": {
         "name": "cn",
-        "ipOrCIDR": "1.0.1.0/32"
+        "uri": "./cn.txt"
       }
     }
   ],
