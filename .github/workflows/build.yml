@@ -45,7 +45,7 @@ jobs:
       - name: Build geoip files
         run: |
           go build -C geoip ./
-          ./geoip/geoip convert -c ./geoip/config.json
+          ./geoip/geoip convert -c ./config.json
 
       - name: Remove unnecessary files
         run: |
