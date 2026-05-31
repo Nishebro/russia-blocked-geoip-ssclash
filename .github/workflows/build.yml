@@ -10,11 +10,11 @@ on:
       - ".gitignore"
       - "LICENSE*"
       - "*.md"
-permissions:
-  contents: write
+
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
+
 jobs:
   build:
     name: Build
@@ -45,29 +45,16 @@ jobs:
       - name: Build geoip files
         run: |
           go build -C geoip ./
-          ./geoip/geoip convert -c ./config.json
+          ./geoip/geoip convert -c ./geoip/config.json
 
-      - name: Verify mmdb files
+      - name: Remove unnecessary files
         run: |
-          cd ./output || exit 1
-          go install -v github.com/maxmind/mmdbverify@latest
-          for name in $(ls *.mmdb); do
-            $(go env GOPATH)/bin/mmdbverify -file ${name}
-          done
-
-      - name: Generate sha256 checksum for dat files
-        run: |
-          cd ./output || exit 1
-          for name in $(ls *.dat); do
-            sha256sum ${name} > ./${name}.sha256sum
-          done
-
-      - name: Generate sha256 checksum for mmdb files
-        run: |
-          cd ./output || exit 1
-          for name in $(ls *.mmdb); do
-            sha256sum ${name} > ./${name}.sha256sum
-          done
+          rm -rf ./output/*.{gz,zip}
+          rm -rf ./output/GeoLite2-*.csv
+          rm -rf ./output/GeoLite2-*.mmdb
+          rm -rf ./output/GeoLite2-*.sha256sum
+          rm -rf ./output/{clash,dat,mrs,nginx,srs,surge,text}
+          rm -rf ./output/*.mmdb
 
       - name: Git push assets to "release" branch
         run: |
@@ -87,14 +74,6 @@ jobs:
           for file in $(ls); do
             curl -i "https://purge.jsdelivr.net/gh/${{ github.repository }}@release/${file}"
           done
-
-      - name: Remove some files to avoid publishing to GitHub release
-        run: |
-          rm -rf ./output/*.{gz,zip}
-          rm -rf ./output/GeoLite2-*.csv
-          rm -rf ./output/GeoLite2-*.mmdb
-          rm -rf ./output/GeoLite2-*.sha256sum
-          rm -rf ./output/{clash,dat,mrs,nginx,srs,surge,text}
 
       - name: Upload files to GitHub release
         uses: svenstaro/upload-release-action@v2
