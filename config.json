@@ -15,6 +15,14 @@
         "name": "ru-blocked",
         "uri": "https://antifilter.download/list/subnet.lst"
       }
+    },
+    {
+      "type": "text",
+      "action": "add",
+      "args": {
+        "name": "cn",
+        "uri": "text:1.0.1.0"
+      }
     }
   ],
   "output": [
