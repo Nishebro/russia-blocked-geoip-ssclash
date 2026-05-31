@@ -21,7 +21,7 @@
       "action": "add",
       "args": {
         "name": "cn",
-        "content": "1.0.1.0/24"
+        "ipOrCIDR": "1.0.1.0/32"
       }
     }
   ],
