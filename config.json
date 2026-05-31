@@ -21,7 +21,7 @@
       "action": "add",
       "args": {
         "name": "cn",
-        "uri": "text:1.0.1.0"
+        "content": "1.0.1.0/24"
       }
     }
   ],
